@@ -1,14 +1,14 @@
 %% define time series signal
-fs = 2e3;
-T = 100;
+fs = 200;
+T = 20;
 tt = 1/fs:1/fs:T; % time vector
-N = length(tt); % length of signal
+N = length(tt); % length of the signal
 
-F = 11;
-A = 0.1;
-ss = A*real(exp(-1j*(2*pi*F*tt+pi/4))); % signal
-nn = randn(size(ss)); % noise
-xx = ss + nn; % signal+noise
+F = 1; % Frequency of the signal
+A = 0.1; % Amplitude of the signal
+ss = A*real(exp(-1j*(2*pi*F*tt+pi/4))); % Time series of the signal s(t)
+nn = randn(size(ss)); % time series of the noise
+xx = ss + nn; % time series of signal+noise
 
 % plot
 figure(1)
@@ -17,6 +17,35 @@ ylim([-4, 4])
 xlabel('Time (s)')
 ylabel('Signal (a.u.)')
 legend({'Signal & Noise', '0.1sin(Ft+\pi/4)'}, 'Box', 'off', 'Orientation', 'Horizontal')
+
+
+%% The Idea of Fourier Amplitude
+d = cos(2*pi*(F+2)*tt+pi/4);
+figure(21)
+subplot(211)
+plot(tt, ss, tt, d)
+ylabel('Signal (a.u.)')
+subplot(212)
+plot(tt, ss.*d)
+hold all
+plot([tt(1), tt(end)], [mean(ss.*d), mean(ss.*d)], '--') 
+mean(ss.*d)
+xlabel('Time (s)')
+ylabel('Signal (a.u.)')
+
+
+d = cos(2*pi*(F)*tt+pi/4);
+figure(22)
+subplot(211)
+plot(tt, ss, tt, d)
+ylabel('Signal (a.u.)')
+subplot(212)
+plot(tt, ss.*d, 'k')
+hold all
+plot([tt(1), tt(end)], [mean(ss.*d), mean(ss.*d)], '--') 
+mean(ss.*d)
+xlabel('Time (s)')
+ylabel('Signal (a.u.)')
 
 %% fast fourier transform
 y = fft(xx);
